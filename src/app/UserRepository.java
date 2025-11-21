@@ -1,11 +1,10 @@
 package app;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class UserRepository {
-    User user;
 
     List<User> userList = Arrays.asList(
             new User(1, "Vasya", "vasya@com"),
@@ -14,20 +13,21 @@ public class UserRepository {
             new User(4, "Anton", "anton@com")
     );
 
-    public User findUserById(int id) {
-        for (User user: userList){
-            if(user.getId() == id)
-                return user;
-        }
-        return null;
+    public Optional<User> findUserById(int id) {
+        return userList.stream()
+                .filter(user -> user.getId() == id )
+                .findFirst();
     }
 
-    public User findUserByEmail(String email){
-        for (User user: userList){
-            if(user.getEmail() == email)
-                return user;
-        }
-        return null;
+    public Optional<User> findUserByEmail(String email){
+        return userList.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
     }
 
+    public Optional<List<User>> findAllUsers(){
+        return userList == null || userList.isEmpty()
+                ? Optional.empty()
+                : Optional.of(userList);
+    }
 }
